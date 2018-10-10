@@ -1,0 +1,56 @@
+#!/bin/bash
+#
+# - this script starts and stops the lrm daemon
+#
+#
+#config 
+# default port is 20000
+port=20000
+#default  root is /tmp
+dir_root=/tmp
+
+
+
+
+start() {
+ 
+  echo -e $"Starting : lrm_http  \033[32m ok \033[0m " 
+  pushd $dir_root >/dev/null
+  nohup  python -m SimpleHTTPServer "$port" > /tmp/lrm_http_log 2>&1  & 
+
+}
+
+stop() {
+  pIDa=`/usr/sbin/lsof -i :"$port"|grep -v "PID" | awk '{print $2}'`
+        if [ "$pIDa" != "" ];
+                then
+
+                        echo -e $"Stopping  lrm_http"
+                        kill -9  $(ss -n -t -l -p | grep "$port" | column -t | awk -F ',' '{print $(NF-1)}')
+                else
+                        echo "lrm_http services is not start "
+        fi
+
+}
+
+restart() {
+  stop
+  sleep 1
+  start
+}
+
+
+case "$1" in
+  start)
+    $1
+    ;;
+  stop)
+    $1
+    ;;
+  restart)
+    $1
+    ;;
+  *)
+    echo $"Usage: $0 {start|stop|restart}"
+    exit 2
+esac
