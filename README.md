@@ -19,7 +19,12 @@
 #说明
 
 #config  如果想改变端口跟根目录直接修改即可 切记先停止服务在进行修改
+
 #default port is 20000 
+
 #port=20000
+
 #default  root is /tmp
+
 #dir_root=/tmp
+
